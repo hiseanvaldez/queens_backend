@@ -5,7 +5,8 @@ const app = express();
 const PORT = 3000;
 
 app.get("/", (req, res) => {
-  const puzzle = generatePuzzle(8); // Example usage of the function
+  const size = parseInt(req.query.size as string) || 10;
+  const puzzle = generatePuzzle(size);
 
   res.send(JSON.stringify(puzzle));
 });

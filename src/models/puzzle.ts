@@ -1,10 +1,11 @@
 import { Color } from "../constants/colors";
 
 export type Block = [number, number];
+
 export interface Puzzle {
   id: string;
   size: number;
-  hive: Hive[];
+  hives: Hive[];
   createdAt: Date;
 }
 
