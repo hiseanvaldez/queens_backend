@@ -4,7 +4,7 @@ import cors from "cors";
 import { generatePuzzle } from "./lib/puzzle/generator";
 
 const corsOptions = {
-  origin: ["http://localhost:3000/", "https://react-sandbox-ebon.vercel.app/"],
+  origin: "*",
   optionsSuccessStatus: 200,
 };
 

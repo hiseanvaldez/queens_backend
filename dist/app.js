@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const generator_1 = require("./lib/puzzle/generator");
 const corsOptions = {
-    origin: ["http://localhost:3000/", "https://react-sandbox-ebon.vercel.app/"],
+    origin: "*",
     optionsSuccessStatus: 200,
 };
 const app = (0, express_1.default)();
