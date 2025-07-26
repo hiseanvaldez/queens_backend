@@ -1,7 +1,15 @@
 import express from "express";
+import cors from "cors";
+
 import { generatePuzzle } from "./lib/puzzle/generator";
 
+const corsOptions = {
+  origin: ["http://localhost:3000/", "https://react-sandbox-ebon.vercel.app/"],
+  optionsSuccessStatus: 200,
+};
+
 const app = express();
+app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
   res.send("Welcome to Queens API!");
