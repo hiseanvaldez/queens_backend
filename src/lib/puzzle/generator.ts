@@ -98,7 +98,6 @@ export const generateHiveBlocks = (puzzle: Puzzle): Hive[] => {
   const totalCells = size * size;
   const claimed: Set<string> = new Set();
 
-  // Reserve queen spots
   for (const hive of hives) {
     const [r, c] = hive.queen;
     const key = `${r},${c}`;
@@ -107,10 +106,7 @@ export const generateHiveBlocks = (puzzle: Puzzle): Hive[] => {
     claimed.add(key);
   }
 
-  // Total remaining cells
   let remaining = totalCells - hives.length;
-
-  // Determine random territory sizes for each hive
   const territorySizes = Array(hives.length).fill(1);
   remaining -= hives.length;
 
@@ -120,7 +116,6 @@ export const generateHiveBlocks = (puzzle: Puzzle): Hive[] => {
     remaining--;
   }
 
-  // Expand each hive territory
   for (let i = 0; i < hives.length; i++) {
     const hive = hives[i];
     const desired = territorySizes[i];
@@ -150,40 +145,36 @@ export const generateHiveBlocks = (puzzle: Puzzle): Hive[] => {
     }
   }
 
-  const unclaimedTiles: [number, number][] = [];
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
       const key = `${r},${c}`;
-      if (!claimed.has(key)) {
-        unclaimedTiles.push([r, c]);
-      }
-    }
-  }
-  shuffleArray(unclaimedTiles);
+      if (claimed.has(key)) continue;
 
-  for (const [r, c] of unclaimedTiles) {
-    const neighbors = getNeighbors(r, c, size);
-    const adjacentHives: Hive[] = [];
+      const neighbors = getNeighbors(r, c, size);
+      const candidates: Hive[] = [];
 
-    for (const [nr, nc] of neighbors) {
-      const neighborKey = `${nr},${nc}`;
-      if (claimed.has(neighborKey)) {
-        // Find which hive owns this block
-        for (const hive of hives) {
-          if (hive.blocks.some(([br, bc]) => br === nr && bc === nc)) {
-            adjacentHives.push(hive);
-            break;
+      for (const [nr, nc] of neighbors) {
+        const neighborKey = `${nr},${nc}`;
+        if (claimed.has(neighborKey)) {
+          for (const hive of hives) {
+            if (hive.blocks.some(([br, bc]) => br === nr && bc === nc)) {
+              candidates.push(hive);
+              break;
+            }
           }
         }
       }
-    }
 
-    if (adjacentHives.length > 0) {
-      const hive = adjacentHives[getRandomInt(0, adjacentHives.length)];
-      hive.blocks.push([r, c]);
-      claimed.add(`${r},${c}`);
-      board[r][c] = hive.color;
+      const assignedHive =
+        candidates.length > 0
+          ? candidates[getRandomInt(0, candidates.length)]
+          : hives[getRandomInt(0, hives.length)];
+
+      assignedHive.blocks.push([r, c]);
+      board[r][c] = assignedHive.color;
+      claimed.add(key);
     }
   }
+
   return hives;
 };
