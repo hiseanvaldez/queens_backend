@@ -165,11 +165,11 @@ export const generateHiveBlocks = (puzzle: Puzzle): Hive[] => {
         }
       }
 
-      const assignedHive =
-        candidates.length > 0
-          ? candidates[getRandomInt(0, candidates.length)]
-          : hives[getRandomInt(0, hives.length)];
+      if (candidates.length === 0) {
+        continue;
+      }
 
+      const assignedHive = candidates[getRandomInt(0, candidates.length)];
       assignedHive.blocks.push([r, c]);
       board[r][c] = assignedHive.color;
       claimed.add(key);

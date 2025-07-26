@@ -131,9 +131,10 @@ const generateHiveBlocks = (puzzle) => {
                     }
                 }
             }
-            const assignedHive = candidates.length > 0
-                ? candidates[(0, utils_1.getRandomInt)(0, candidates.length)]
-                : hives[(0, utils_1.getRandomInt)(0, hives.length)];
+            if (candidates.length === 0) {
+                continue;
+            }
+            const assignedHive = candidates[(0, utils_1.getRandomInt)(0, candidates.length)];
             assignedHive.blocks.push([r, c]);
             board[r][c] = assignedHive.color;
             claimed.add(key);
